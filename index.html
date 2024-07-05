@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        
+        body{
+            background: #eee;
+            max-width: 960px;
+            margin: 20px auto;
+        }
+        img{
+            padding: 20px;
+        }
+        .sel{
+            background-color: blue;
+        }
+        .card{
+            margin: 10px;
+        }
+        .button{
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        h4{
+            padding: 10px;
+        }
+        .sizeOfImages{
+            font-size: large;
+            display: flex;
+            justify-content: space-between;
+        }
+        .notOkay{
+            border-color: red;
+        }
+        .termoVazio{
+            font-size: larger;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">  
+        <div class="col-md-12" id="search-container">
+            <h1>Busque uma imagem</h1>
+            <p class="termoVazio" v-if="showClassShow">Nenhum termo de busca Digitado</p>
+            <div class="search_box">
+                <form v-on:submit.prevent="">   
+                    <input class="form-control" :class="classSearch" name="search" v-model="busca.query" placeholder="Digite a imagem a ser buscada" v-validate="'required|min:1'">
+                    <h4>Selecione o tamanho da imagem </h4>
+                    <div class="sizeOfImages">
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="large" >
+                            large
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="medium">
+                            medium
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="icon">
+                            icon
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="larger400x300">
+                            larger400x300
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="larger640x480">
+                            larger640x480
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="larger800x600">
+                            larger800x600
+                        </label>
+                        <label class="label">
+                            <input v-model="busca.imgsz" type="radio" value="larger1024x768">
+                            larger1024x768
+                        </label>
+                    </div>
+                </form>    
+            </div>
+            <div class="button">
+                <button class="btn btn-primary" @click="printJson">Buscar</button>
+                <button class="btn btn-primary" @click="downloadImages" v-if="mostrarBotaoBaixar">Baixar {{quantidadeSelecionada}}</button>
+            </div>
+        </div>
+
+        <div id="events-container" class="col-md-12" v-if="existImage">
+            <h2>Images</h2>
+            <p class="subtitle">Imagens retornadas na busca</p>
+            <div id="cards-container" class="row" >
+                <div v-for="image in images" class="card col-md-3" v-bind:class="{sel: image.selected}" @click="selectButtom(image)">
+                    <img v-bind:src="image.image" alt="imagem">
+                    <div v-if="image.selected">&#x2705</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-bind:id="dynamicId"></div>
+
+    <script src="functions.js"></script>
+</body>
+</html>
